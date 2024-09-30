@@ -27,11 +27,11 @@ public class Event {
 
     private String location; // (optional) 없으면 온라인 모임
 
-    private int basePrice; // (optional)
+    private int basePrice; // (optional) 등록비
 
-    private int maxPrice; // (optional)
+    private int maxPrice; // (optional) 등록비
 
-    private int limitOfEnrollment;
+    private int limitOfEnrollment; // 참가 인원 제한
 
     private boolean offline;
 
