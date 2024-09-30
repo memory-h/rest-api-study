@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/restapi
+    username: postgres
+    password: postgres12!@
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true # 하이버네이트가 실행한 SQL을 출력할 때 보기 쉽게 정렬
+        use_sql_comments: true # 쿼리를 출력할 때 주석도 함께 출력
+
+  hateoas:
+    use-hal-as-default-json-media-type: true # 컨트롤러가 반환하는 JSON 응답이 기본적으로 HAL 형식으로 반환되도록 지정
+
+logging:
+  level:
+    org.hibernate.SQL: debug
