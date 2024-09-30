@@ -1,5 +1,8 @@
-package com.memory_h.restapi.events;
+package com.memory_h.restapi.events.controller;
 
+import com.memory_h.restapi.events.domain.Event;
+import com.memory_h.restapi.events.repository.EventRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +15,11 @@ import java.net.URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/events", produces = MediaTypes.HAL_JSON_VALUE) // 해당 타입으로 응답을 보낸다.
 public class EventController {
+
+    private final EventRepository eventRepository;
 
     /**
      * linkTo(EventController.class): EventController 클래스의 경로(URI)를 기준으로 링크를 생성하는 역할을 한다.
@@ -25,7 +31,9 @@ public class EventController {
      */
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        URI createUri = linkTo(EventController.class).slash("{id}").toUri();
+        Event newEvent = eventRepository.save(event);
+
+        URI createUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
         event.setId(10);
 
         return ResponseEntity.created(createUri).body(event);

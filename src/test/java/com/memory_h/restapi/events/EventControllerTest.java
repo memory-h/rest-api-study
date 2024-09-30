@@ -1,10 +1,15 @@
 package com.memory_h.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.memory_h.restapi.events.domain.Event;
+import com.memory_h.restapi.events.repository.EventRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -12,8 +17,7 @@ import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 public class EventControllerTest {
@@ -23,6 +27,9 @@ public class EventControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    EventRepository eventRepository;
 
     @Test
     void createEvent() throws Exception {
@@ -39,6 +46,9 @@ public class EventControllerTest {
                 .location("강남역 D2 스타텁 팩토리")
                 .build();
 
+        event.setId(10);
+        Mockito.when(eventRepository.save(event)).thenReturn(event);
+
         mockMvc.perform(post("/api/events")
                         .contentType(MediaType.APPLICATION_JSON) // 요청 또는 응답에서 전송되는 데이터의 타입, 즉 내가 보내는 데이터의 형식
                         .accept(MediaTypes.HAL_JSON_VALUE) // 클라이언트가 서버에게 어떤 형식의 응답 데이터를 받을 수 있는지, 즉 내가 받고 싶은 데이터의 형식
@@ -46,7 +56,9 @@ public class EventControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists()); // id가 있는지
+                .andExpect(jsonPath("id").exists()) // id가 있는지
+                .andExpect(header().exists(HttpHeaders.LOCATION))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE));
     }
 
 }

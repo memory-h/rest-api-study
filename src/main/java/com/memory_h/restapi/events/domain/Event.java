@@ -1,5 +1,9 @@
-package com.memory_h.restapi.events;
+package com.memory_h.restapi.events.domain;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,6 +15,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")
 public class Event {
 
+    @Id @GeneratedValue
     private Integer id;
 
     private String name;
@@ -37,6 +42,7 @@ public class Event {
 
     private boolean free;
 
+    @Enumerated(EnumType.STRING)
     private EventStatus eventStatus;
 
 }

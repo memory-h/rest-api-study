@@ -1,4 +1,4 @@
-package com.memory_h.restapi.events;
+package com.memory_h.restapi.events.domain;
 
 public enum EventStatus {
 
