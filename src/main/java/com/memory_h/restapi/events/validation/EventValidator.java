@@ -1,10 +1,8 @@
-package com.memory_h.restapi.events.validator;
+package com.memory_h.restapi.events.validation;
 
 import com.memory_h.restapi.events.dto.EventDto;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import java.time.LocalDateTime;
 
@@ -13,8 +11,7 @@ public class EventValidator {
 
     public void validate(EventDto eventDto, BindingResult bindingResult) {
         if (eventDto.getBasePrice() > eventDto.getMaxPrice() && eventDto.getMaxPrice() != 0) {
-            bindingResult.rejectValue("basePrice", "wrongValue", "basePrice is wrong.");
-            bindingResult.rejectValue("maxPrice", "wrongValue", "maxPrice is wrong.");
+            bindingResult.reject("wrongPrices", "Value of Prices are wrong."); // 글로벌 에러
         }
 
         LocalDateTime endEventDateTime = eventDto.getEndEventDateTime();

@@ -41,9 +41,9 @@ public class EventControllerTest {
 //    EventRepository eventRepository;
 
     @Test
-    @DisplayName("정상적으로 이벤트를 생성하는 태스트")
+    @DisplayName("정상적으로 이벤트를 생성하는 테스트")
     void createEvent() throws Exception {
-        EventDto event = EventDto.builder()
+        EventDto eventDto = EventDto.builder()
                 .name("Spring")
                 .description("REST API Development with Spring")
                 .beginEnrollmentDateTime(LocalDateTime.of(2024, 9, 30, 10, 37))
@@ -61,7 +61,7 @@ public class EventControllerTest {
         mockMvc.perform(post("/api/events")
                         .contentType(MediaType.APPLICATION_JSON) // 요청 또는 응답에서 전송되는 데이터의 타입, 즉 내가 보내는 데이터의 형식
                         .accept(MediaTypes.HAL_JSON_VALUE) // 클라이언트가 서버에게 어떤 형식의 응답 데이터를 받을 수 있는지, 즉 내가 받고 싶은 데이터의 형식
-                        .content(objectMapper.writeValueAsString(event)) // json으로 바꾸고 본문에 넣어준다.
+                        .content(objectMapper.writeValueAsString(eventDto)) // json으로 바꾸고 본문에 넣어준다.
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -133,10 +133,15 @@ public class EventControllerTest {
 
         mockMvc.perform(post("/api/events")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaTypes.HAL_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(eventDto))
                 )
-                .andExpect(status().isBadRequest());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].objectName").exists())
+                .andExpect(jsonPath("$[0].field").exists())
+                .andExpect(jsonPath("$[0].defaultMessage").exists())
+                .andExpect(jsonPath("$[0].code").exists())
+                .andExpect(jsonPath("$[0].rejectedValue").exists());
     }
 
 }
