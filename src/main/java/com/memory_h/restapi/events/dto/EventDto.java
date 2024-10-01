@@ -1,20 +1,14 @@
-package com.memory_h.restapi.events.domain;
+package com.memory_h.restapi.events.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Data
 @NoArgsConstructor
-@Entity
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Event {
-
-    @Id @GeneratedValue
-    private Integer id;
+public class EventDto {
 
     private String name;
 
@@ -35,12 +29,5 @@ public class Event {
     private int maxPrice; // (optional) 등록비
 
     private int limitOfEnrollment; // 참가 인원 제한
-
-    private boolean offline;
-
-    private boolean free;
-
-    @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus = EventStatus.DRAFT;
 
 }

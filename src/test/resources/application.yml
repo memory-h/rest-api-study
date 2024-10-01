@@ -1,4 +1,8 @@
 spring:
+  config:
+    activate:
+      on-profile: test
+
   datasource:
     url: jdbc:h2:mem:restapi
     username: sa
@@ -16,6 +20,10 @@ spring:
 
   hateoas:
     use-hal-as-default-json-media-type: true # 컨트롤러가 반환하는 JSON 응답이 기본적으로 HAL 형식으로 반환되도록 지정
+
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
 
 logging:
   level:
