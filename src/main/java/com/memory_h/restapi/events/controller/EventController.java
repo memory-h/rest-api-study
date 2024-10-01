@@ -3,6 +3,7 @@ package com.memory_h.restapi.events.controller;
 import com.memory_h.restapi.events.domain.Event;
 import com.memory_h.restapi.events.dto.EventDto;
 import com.memory_h.restapi.events.repository.EventRepository;
+import com.memory_h.restapi.events.validator.EventValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,7 @@ public class EventController {
 
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
+    private final EventValidator eventValidator;
 
     /**
      * linkTo(EventController.class): EventController 클래스의 경로(URI)를 기준으로 링크를 생성하는 역할을 한다.
@@ -36,6 +38,12 @@ public class EventController {
      */
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody @Valid EventDto eventDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        eventValidator.validate(eventDto, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
