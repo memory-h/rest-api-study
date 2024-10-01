@@ -3,10 +3,12 @@ package com.memory_h.restapi.events.controller;
 import com.memory_h.restapi.events.domain.Event;
 import com.memory_h.restapi.events.dto.EventDto;
 import com.memory_h.restapi.events.repository.EventRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +35,11 @@ public class EventController {
      * toUri(): 실제 URI 객체로 변환한다.
      */
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody EventDto eventDto) {
+    public ResponseEntity<Event> createEvent(@RequestBody @Valid EventDto eventDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         /*
         ModelMapper는 DTO에서 받은 값을 엔티티로 변환할 때, 수동으로 생성자나 setter 메서드를 사용하는 대신 자동으로 매핑해준다.
         (DTO와 엔티티 간에 동일한 필드명을 기준으로 자동으로 매핑한다.)
