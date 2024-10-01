@@ -43,6 +43,9 @@ dependencies {
 	// modelmapper
 	implementation 'org.modelmapper:modelmapper:3.1.1'
 
+	// 매개변수화된 테스트를 작성할 수 있게 해주는 확장 모듈
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

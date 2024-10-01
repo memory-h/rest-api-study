@@ -53,6 +53,7 @@ public class EventController {
         (DTO와 엔티티 간에 동일한 필드명을 기준으로 자동으로 매핑한다.)
          */
         Event event = modelMapper.map(eventDto, Event.class);
+        event.update();
         Event newEvent = eventRepository.save(event);
 
         URI createUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
